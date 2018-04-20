@@ -1,7 +1,11 @@
 import java.awt.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Iterator;
 
-class SelfCollection {
+class SelfCollection implements Serializable {
     private static int arrSize = 15;
     private static String arr[] = new String[arrSize];
     private static int end = 0;
@@ -68,7 +72,7 @@ class SelfCollection {
             @Override
             public boolean hasNext() {
                 if(iterable[0] != end)
-                return true;
+                    return true;
                 else return false;
             }
 
@@ -81,14 +85,19 @@ class SelfCollection {
 }
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         SelfCollection var = new SelfCollection();
         for(int i = 0; i < 20; i++)
-        var.add(" " + i + 20);
+            var.add(" " + i + 20);
         var.remove(" 4");
         Iterator<String> gener =  var.iterator();
         while(gener.hasNext())
             System.out.print(gener.next());
-
+        FileOutputStream fos = new FileOutputStream("temp.out");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        SelfCollection ts = new SelfCollection();
+        oos.writeObject(var);
+        oos.flush();
+        oos.close();
     }
 }
